@@ -1,0 +1,3 @@
+-record(everything, {?ELEMENT_BASE(element_everything), attr1, attr2}).
+-record(health, {?ELEMENT_BASE(element_health), attr1, attr2}).
+-record(problems, {?ELEMENT_BASE(element_problems), attr1, attr2}).
