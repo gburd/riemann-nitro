@@ -14,21 +14,23 @@ main() ->
 
 title() -> "Dashboard".
 
-iso_8601_fmt(DateTime) ->
-    {{Year,Month,Day},{Hour,Min,Sec}} = DateTime,
-    io_lib:format("~4.10.0B-~2.10.0B-~2.10.0B ~2.10.0B:~2.10.0B:~2.10.0B",
-        [Year, Month, Day, Hour, Min, Sec]).
-
 body() ->
+    wf:comet(fun() -> display_server_time() end),
     [
         #h1 { text="Dashboard" },
         #span { style="position: absolute; top: 4px; right: 4px;", body=[
             " Welcome, ", #span { class=description, text=wf:user() }, " ",
             #button { text="Logout", postback=logout },
-            " (", iso_8601_fmt(erlang:localtime()), ") "
+            " (", #span { id=server_time }, ") "
         ]},
         inner_body()
     ].
+
+display_server_time() ->
+    wf:update(server_time, httpd_util:rfc1123_date(erlang:localtime())),
+    wf:flush(),
+    timer:sleep(1 * 1000),
+    display_server_time().
 
 inner_body() ->
     [
