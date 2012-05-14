@@ -2,6 +2,7 @@
 -module (index).
 -compile(export_all).
 -include_lib("nitrogen_core/include/wf.hrl").
+-include("../include/records.hrl").
 
 main() ->
     case wf:role(managers) of
@@ -22,7 +23,7 @@ body() ->
     [
         #h1 { text="Dashboard" },
         #span { style="position: absolute; top: 4px; right: 4px;", body=[
-            " Welcome, ", #span { class=description, text=wf:user() },
+            " Welcome, ", #span { class=description, text=wf:user() }, " ",
             #button { text="Logout", postback=logout },
             " (", iso_8601_fmt(erlang:localtime()), ") "
         ]},
@@ -31,7 +32,8 @@ body() ->
 
 inner_body() ->
     [
-        #p{}, "Hello, here's the scoop"
+        #p{}, "Hello, here's the scoop",
+        #problems {}, #health {}, #everything {}
     ].
 
 event(logout) ->
