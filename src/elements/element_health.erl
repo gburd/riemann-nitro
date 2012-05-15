@@ -7,4 +7,7 @@
 reflect() -> record_info(fields, health).
 
 render_element(_Record = #health{}) ->
-    "<b>Hello from health</b>".
+    #span { class="box", body=[
+        #h2 { text="Health" },
+        "hello"
+    ]}.

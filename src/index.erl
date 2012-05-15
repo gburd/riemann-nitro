@@ -5,11 +5,11 @@
 -include("../include/records.hrl").
 
 main() ->
-    case wf:role(managers) of
-        true ->
-            #template { file="./site/templates/bare.html" };
-        false ->
-            wf:redirect_to_login("/login")
+    case wf:user() of
+        undefined ->
+            wf:redirect_to_login("/login");
+        _ ->
+            #template { file="./site/templates/bare.html" }
     end.
 
 title() -> "Dashboard".
@@ -20,7 +20,7 @@ body() ->
         #h1 { text="Dashboard" },
         #span { style="position: absolute; top: 4px; right: 4px;", body=[
             " Welcome, ", #span { class=description, text=wf:user() }, " ",
-            #button { text="Logout", postback=logout },
+            #link { show_if=(wf:user() /= undefined), text="logout", postback=logout },
             " (", #span { id=server_time }, ") "
         ]},
         inner_body()
@@ -34,10 +34,10 @@ display_server_time() ->
 
 inner_body() ->
     [
-        #p{}, "Hello, here's the scoop",
         #problems {}, #health {}, #everything {}
     ].
 
 event(logout) ->
     wf:logout(),
+    wf:clear_session(),
     wf:redirect_to_login("/login").

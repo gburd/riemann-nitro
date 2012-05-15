@@ -7,4 +7,7 @@
 reflect() -> record_info(fields, everything).
 
 render_element(_Record = #everything{}) ->
-    "<b>Hello from everything</b>".
+    #span { class="box", body=[
+        #h2 { text="Everything" },
+        "hello"
+    ]}.
